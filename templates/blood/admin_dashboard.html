@@ -1,0 +1,396 @@
+{% extends 'blood/adminbase.html' %}
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f0f4f8;
+    }
+
+    .dashboard-container {
+        padding: 2rem;
+        background: #f8f9fe;
+        min-height: 100vh;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        color: #2d3748;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        opacity: 0;
+        animation: slideDown 0.5s ease forwards;
+        text-align: center;
+        position: relative;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #3498db, #2980b9);
+    }
+
+    .blood-group-container {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: space-between;
+        margin-bottom: 2.5rem;
+    }
+
+    .blood-group-column {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .stats-row {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        margin-top: 3rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        background: white;
+        position: relative;
+        opacity: 0;
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, var(--card-accent), var(--card-accent-light));
+    }
+
+    .card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-body {
+        padding: 2rem 1.5rem;
+        text-align: center;
+    }
+
+    .blood {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .blood h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        background: linear-gradient(135deg, var(--card-accent), var(--card-accent-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover .blood h2 {
+        transform: scale(1.1);
+    }
+
+    .blood i {
+        font-size: 2rem;
+        animation: pulse 2s infinite;
+    }
+
+    .unit-count {
+        font-size: 2rem;
+        font-weight: 600;
+        color: #4a5568;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .card:hover .unit-count {
+        transform: scale(1.1);
+    }
+
+    .stats-card .blood {
+        background: linear-gradient(135deg, var(--card-accent), var(--card-accent-light));
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .stats-card:hover .blood {
+        transform: rotate(15deg) scale(1.1);
+    }
+
+    .stats-card .blood::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, transparent 50%, rgba(255,255,255,0.2) 150%);
+    }
+
+    .stats-card .blood i {
+        font-size: 2.2rem;
+        color: white;
+    }
+
+    .stats-card .stat-label {
+        font-size: 1rem;
+        color: #718096;
+        margin-bottom: 0.75rem;
+        font-weight: 500;
+    }
+
+    .stats-card .stat-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, var(--card-accent), var(--card-accent-light));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .stats-card:hover .stat-value {
+        transform: scale(1.1);
+    }
+
+    hr {
+        border: none;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
+        margin: 3rem 0;
+    }
+
+    /* Enhanced color schemes for blood types */
+    .blood-type-a-pos { --card-accent: #e53935; --card-accent-light: #ff6b6b; }
+    .blood-type-b-pos { --card-accent: #2196f3; --card-accent-light: #64b5f6; }
+    .blood-type-o-pos { --card-accent: #43a047; --card-accent-light: #81c784; }
+    .blood-type-ab-pos { --card-accent: #8e24aa; --card-accent-light: #ba68c8; }
+    .blood-type-a-neg { --card-accent: #fb8c00; --card-accent-light: #ffb74d; }
+    .blood-type-b-neg { --card-accent: #00acc1; --card-accent-light: #4dd0e1; }
+    .blood-type-o-neg { --card-accent: #3949ab; --card-accent-light: #7986cb; }
+    .blood-type-ab-neg { --card-accent: #5e35b1; --card-accent-light: #9575cd; }
+
+    /* Stats cards color schemes */
+    .donors-card { --card-accent: #2196f3; --card-accent-light: #64b5f6; }
+    .requests-card { --card-accent: #ff9800; --card-accent-light: #ffb74d; }
+    .approved-card { --card-accent: #4caf50; --card-accent-light: #81c784; }
+    .total-units-card { --card-accent: #e91e63; --card-accent-light: #f06292; }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Animation delays for cards */
+    .blood-group-column:nth-child(1) .card:nth-child(1) { animation-delay: 0.1s; }
+    .blood-group-column:nth-child(1) .card:nth-child(2) { animation-delay: 0.2s; }
+    .blood-group-column:nth-child(1) .card:nth-child(3) { animation-delay: 0.3s; }
+    .blood-group-column:nth-child(2) .card:nth-child(1) { animation-delay: 0.2s; }
+    .blood-group-column:nth-child(2) .card:nth-child(2) { animation-delay: 0.3s; }
+    .blood-group-column:nth-child(2) .card:nth-child(3) { animation-delay: 0.4s; }
+    .blood-group-column:nth-child(3) .card:nth-child(1) { animation-delay: 0.3s; }
+    .blood-group-column:nth-child(3) .card:nth-child(2) { animation-delay: 0.4s; }
+
+    .stats-row .card:nth-child(1) { animation-delay: 0.5s; }
+    .stats-row .card:nth-child(2) { animation-delay: 0.6s; }
+    .stats-row .card:nth-child(3) { animation-delay: 0.7s; }
+    .stats-row .card:nth-child(4) { animation-delay: 0.8s; }
+
+    @media (max-width: 1024px) {
+        .blood-group-container {
+            flex-direction: column;
+        }
+
+        .stats-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-container {
+            padding: 1rem;
+        }
+
+        .blood-group-container {
+            gap: 1rem;
+        }
+
+        .stats-row {
+            grid-template-columns: 1fr;
+        }
+
+        .card-body {
+            padding: 1.5rem 1rem;
+        }
+
+        .blood h2 {
+            font-size: 2rem;
+        }
+
+        .unit-count {
+            font-size: 1.6rem;
+        }
+
+        .stats-card .stat-value {
+            font-size: 1.6rem;
+        }
+    }
+</style>
+
+<div class="dashboard-container">
+    <h2 class="section-title">Blood Inventory Status</h2>
+    <div class="blood-group-container">
+        <div class="blood-group-column">
+            <div class="card blood-type-a-pos">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>A+ <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{A1.unit}}</div>
+                </div>
+            </div>
+            <div class="card blood-type-a-neg">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>A- <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{A2.unit}}</div>
+                </div>
+            </div>
+            <div class="card blood-type-ab-pos">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>AB+ <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{AB1.unit}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="blood-group-column">
+            <div class="card blood-type-b-pos">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>B+ <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{B1.unit}}</div>
+                </div>
+            </div>
+            <div class="card blood-type-b-neg">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>B- <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{B2.unit}}</div>
+                </div>
+            </div>
+            <div class="card blood-type-ab-neg">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>AB- <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{AB2.unit}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="blood-group-column">
+            <div class="card blood-type-o-pos">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>O+ <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{O1.unit}}</div>
+                </div>
+            </div>
+            <div class="card blood-type-o-neg">
+                <div class="card-body">
+                    <div class="blood">
+                        <h2>O- <i class="fas fa-tint"></i></h2>
+                    </div>
+                    <div class="unit-count">{{O2.unit}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2 class="section-title">Overall Statistics</h2>
+    <div class="stats-row">
+        <div class="card stats-card donors-card">
+            <div class="card-body">
+                <div class="blood">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-label">Total Donors</div>
+                <div class="stat-value">{{totaldonors}}</div>
+            </div>
+        </div>
+        <div class="card stats-card requests-card">
+            <div class="card-body">
+                <div class="blood">
+                    <i class="fas fa-spinner"></i>
+                </div>
+                <div class="stat-label">Total Requests</div>
+                <div class="stat-value">{{totalrequest}}</div>
+            </div>
+        </div>
+        <div class="card stats-card approved-card">
+            <div class="card-body">
+                <div class="blood">
+                    <i class="far fa-check-circle"></i>
+                </div>
+                <div class="stat-label">Approved Requests</div>
+                <div class="stat-value">{{totalapprovedrequest}}</div>
+            </div>
+        </div>
+        <div class="card stats-card total-units-card">
+            <div class="card-body">
+                <div class="blood">
+                    <i class="fas fa-tint"></i>
+                </div>
+                <div class="stat-label">Total Blood Units (ml)</div>
+                <div class="stat-value">{{totalbloodunit}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

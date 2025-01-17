@@ -1,0 +1,123 @@
+{% extends 'blood/adminbase.html' %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+<br><br>
+<div class="container">
+    <h4 class="text-center my-4 text-primary">PATIENT DETAILS</h4>
+    <table class="table table-light table-hover table-bordered table-striped">
+        <thead class="bg-info text-white">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Profile</th>
+                <th scope="col">Blood Group</th>
+                <th scope="col">Age</th>
+                <th scope="col">Disease</th>
+                <th scope="col">Mobile</th>
+                <th class="text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in patients %}
+            <tr class="patient-row">
+                <td>{{ t.get_name }}</td>
+                <td><img src="{% static t.profile_pic.url %}" alt="Profile Pic" class="profile-pic" /></td>
+                <td>{{ t.bloodgroup }}</td>
+                <td>{{ t.age }}</td>
+                <td>{{ t.disease }}</td>
+                <td>{{ t.mobile }}</td>
+                <td class="text-right">
+                    <button class="btn btn-primary badge-pill edit-btn">
+                        <a href="{% url 'update-patient' t.id %}" class="action-link">EDIT</a>
+                    </button>
+                    <button class="btn btn-danger badge-pill delete-btn">
+                        <a href="{% url 'delete-patient' t.id %}" class="action-link">DELETE</a>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* General Styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f9fa;
+    }
+    .container {
+        background-color: #ffffff;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        margin-top: 30px;
+    }
+    h4 {
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    /* Table Styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+    th {
+        background-color: #17a2b8;
+        color: #fff;
+        text-transform: uppercase;
+    }
+    td {
+        background-color: #f9f9f9;
+        font-size: 14px;
+    }
+    .patient-row:hover {
+        background-color: #f1f1f1;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Image Styling */
+    .profile-pic {
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        transition: transform 0.3s ease;
+    }
+    .profile-pic:hover {
+        transform: scale(1.2);
+    }
+
+    /* Button Styling */
+    .btn {
+        transition: background-color 0.3s ease;
+    }
+    .edit-btn, .delete-btn {
+        width: 80px;
+    }
+    .action-link {
+        text-decoration: none;
+        color: white;
+    }
+    .edit-btn:hover {
+        background-color: #007bff;
+    }
+    .delete-btn:hover {
+        background-color: #dc3545;
+    }
+
+    /* Hover Animation for Table Row */
+    tr.patient-row {
+        transition: transform 0.3s ease;
+    }
+    tr.patient-row:hover {
+        transform: translateX(5px);
+    }
+</style>
+{% endblock content %}

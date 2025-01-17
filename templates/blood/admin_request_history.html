@@ -1,0 +1,160 @@
+{% extends 'blood/adminbase.html' %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+<head>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+        h4 {
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #17a2b8;
+            color: #fff;
+            text-transform: uppercase;
+        }
+        td {
+            background-color: #f9f9f9;
+            font-size: 14px;
+        }
+
+        /* Row Hover Effect */
+        tr:hover {
+            background-color: #f1f1f1;
+            transform: translateX(5px);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Status Labels */
+        .label {
+            padding: 8px;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+
+        .success {
+            background-color: #4CAF50;
+        }
+
+        .info {
+            background-color: #2196F3;
+        }
+
+        .warning {
+            background-color: #ff9800;
+        }
+
+        .danger {
+            background-color: #f44336;
+        }
+
+        .other {
+            background-color: #e7e7e7;
+            color: black;
+        }
+
+        /* Custom Animation for Loading Message */
+        .message {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Button Styling */
+        .btn {
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Container for Message */
+        .message-container {
+            padding: 15px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<br><br>
+<div class="container">
+    <h4 class="text-center my-4 text-primary">Blood Request History</h4>
+    
+    {% if message %}
+    <div class="message-container message">
+        <h5 class="text-center">{{ message }}</h5>
+    </div>
+    {% endif %}
+
+    <table class="table table-light table-hover table-bordered table-striped">
+        <thead class="bg-info text-white">
+            <tr>
+                <th scope="col">Patient Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Blood Group</th>
+                <th scope="col">Unit (in ml)</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Stock Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in requests %}
+            <tr>
+                <td>{{ t.patient_name }}</td>
+                <td>{{ t.patient_age }}</td>
+                <td>{{ t.reason }}</td>
+                <td>{{ t.bloodgroup }}</td>
+                <td>{{ t.unit }}</td>
+                <td>{{ t.date }}</td>
+                
+                {% if t.status == 'Approved' %}
+                <td><span class="label success">Approved</span></td>
+                <td><span class="label warning">{{ t.unit }}</span></td>
+                {% else %}
+                <td><span class="label danger">Rejected</span></td>
+                <td><span class="label other">0 </span></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

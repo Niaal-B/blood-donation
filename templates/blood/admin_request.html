@@ -1,0 +1,182 @@
+{% extends 'blood/adminbase.html' %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+<head>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        h4 {
+            font-weight: bold;
+            color: #343a40;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #17a2b8;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        td {
+            background-color: #f9f9f9;
+            font-size: 14px;
+        }
+
+        /* Row Hover Effect */
+        tr:hover {
+            background-color: #f1f1f1;
+            transform: translateX(5px);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Button Styling */
+        .btn {
+            transition: background-color 0.3s ease;
+            border-radius: 5px;
+            padding: 8px 20px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        /* Message Styles */
+        .message-container {
+            padding: 15px;
+            background-color: #f44336;
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .message-container h5 {
+            text-align: center;
+        }
+
+        /* Message Fade-in Animation */
+        .message-container {
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* No Request Message */
+        .no-requests {
+            text-align: center;
+            color: #888;
+            font-size: 18px;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<br><br>
+<div class="container">
+    {% if requests %}
+    <h4>Blood Requested</h4><br>
+    {% if message %}
+        <div class="message-container">
+            <h5>{{ message }}</h5>
+        </div><br>
+    {% endif %}
+    
+    <table class="table table-light table-hover table-bordered table-striped">
+        <thead class="bg-info">
+            <tr>
+                <th scope="col">Patient Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Reason</th>
+                <th scope="col">Blood Group</th>
+                <th scope="col">Unit (in ml)</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th class="text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in requests %}
+            <tr>
+                <td>{{ t.patient_name }}</td>
+                <td>{{ t.patient_age }}</td>
+                <td>{{ t.reason }}</td>
+                <td>{{ t.bloodgroup }}</td>
+                <td>{{ t.unit }}</td>
+                <td>{{ t.date }}</td>
+                <td>
+                    {% if t.status == 'Pending' %}
+                        <span class="badge badge-warning">Pending</span>
+                    {% elif t.status == 'Approved' %}
+                        <span class="badge badge-success">Approved</span>
+                    {% else %}
+                        <span class="badge badge-danger">Rejected</span>
+                    {% endif %}
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-primary"><a href="{% url 'update-approve-status' t.id %}" style="text-decoration: none; color: white;">Approve</a></button>
+                    <button class="btn btn-danger"><a href="{% url 'update-reject-status' t.id %}" style="text-decoration: none; color: white;">Reject</a></button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% else %}
+        <div class="no-requests">
+            <h5>No Blood Request By Patient / Donor!</h5>
+        </div>
+    {% endif %}
+</div>
+
+<!-- developed By : sumit kumar -->
+<!-- facebook : fb.com/sumit.luv -->
+<!-- youtube : youtube.com/lazycoders -->
+
+{% endblock content %}

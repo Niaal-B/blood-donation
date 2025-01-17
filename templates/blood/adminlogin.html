@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #dc3545;
+            --hover-red: #c82333;
+            --light-gray: #f8f9fa;
+            --border-color: #e9ecef;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7eb 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 160px);
+            padding: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+        }
+
+        .card-heading {
+            background: var(--primary-red);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .card-heading h2 {
+            margin: 0;
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 2.5rem;
+        }
+
+        .form-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .name {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-red);
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--hover-red);
+        }
+
+        .footer {
+            margin-top: auto;
+            background: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+        }
+
+        @media (max-width: 480px) {
+            .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include "blood/navbar.html" %}
+    
+    <div class="page-wrapper">
+        <div class="card">
+            <div class="card-heading">
+                <h2>Admin Login</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="name">Username</div>
+                        <div class="value">
+                            <div class="input-group">
+                                {{ form.username }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="name">Password</div>
+                        <div class="value">
+                            <div class="input-group">
+                                {{ form.password }}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn" type="submit">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% include "blood/footer.html" %}
+</body>
+</html>

@@ -1,0 +1,241 @@
+{% extends 'blood/adminbase.html' %}
+{% block content %}
+{% load widget_tweaks %}
+<style>
+  /* General container settings */
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  /* Styling for blood group cards */
+  .card {
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .card:hover {
+    transform: scale(1.05);
+  }
+
+  .card-body {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .blood {
+    font-size: 36px;
+    color: #FF5733;
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .fas.fa-tint {
+    margin-left: 10px;
+    color: #FF5733;
+  }
+
+  .card-body h2 {
+    font-size: 2rem;
+  }
+
+  /* Layout for the rows */
+  .row {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+  }
+
+  /* Styling for the blood group numbers */
+  .card-body div {
+    font-size: 20px;
+    color: #444;
+    font-weight: 500;
+  }
+
+  /* Form styling */
+  .form-inline {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .form-control {
+    width: 250px;
+    border-radius: 30px;
+    padding: 12px;
+    font-size: 16px;
+    transition: all 0.3s;
+  }
+
+  .form-control:focus {
+    border-color: #FF5733;
+    box-shadow: 0 0 5px rgba(255, 87, 51, 0.5);
+  }
+
+  .btn-primary {
+    background-color: #FF5733;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    background-color: #D43F00;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  /* Responsiveness */
+  @media (max-width: 768px) {
+    .row {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  /* Animation for elements */
+  .fade-in {
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .xyz {
+    animation: fadeIn 1.5s ease-in-out;
+  }
+
+</style>
+<br><br>
+<div class="container">
+  <div class="row fade-in">
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>A+ <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{A1.unit}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>B+ <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{B1.unit}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>O+ <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{O1.unit}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>AB+ <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{AB1.unit}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row fade-in">
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>A- <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{A2.unit}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>B- <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{B2.unit}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>O- <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{O2.unit}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card bg-light">
+        <div class="card-body">
+          <div class="blood">
+            <h2>AB- <i class="fas fa-tint"></i></h2>
+          </div>
+          <div>{{AB2.unit}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <h3 class="text-center fade-in">Update Blood Unit</h3><br>
+  <div class="xyz fade-in">
+    <form class="form-inline" method="POST">
+      {% csrf_token %}
+      <div class="form-group mx-sm-3 mb-6">
+        <select name="bloodgroup" class="form-control">
+          <option disabled="disabled" selected="selected">Choose Blood Group</option>
+          <option>O+</option>
+          <option>O-</option>
+          <option>A+</option>
+          <option>A-</option>
+          <option>B+</option>
+          <option>B-</option>
+          <option>AB+</option>
+          <option>AB-</option>
+        </select>
+      </div>
+      <div class="form-group mx-sm-3 mb-6">
+        <input type="number" class="form-control" name="unit" placeholder="Unit">
+      </div>
+      <button type="submit" class="btn btn-primary mb-2">Update</button>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

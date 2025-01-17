@@ -1,0 +1,192 @@
+{% extends 'blood/adminbase.html' %}
+{% block content %}
+{% load widget_tweaks %}
+{% load static %}
+<head>
+    <style>
+        .container {
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h4 {
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h4::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #e74c3c;
+            transform: scaleX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        h4:hover::after {
+            transform: scaleX(1);
+        }
+
+        .table {
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-top: 1rem;
+        }
+
+        .table thead th {
+            border: none;
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody tr {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .table tbody tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .table tbody td {
+            border: none;
+            padding: 12px;
+            vertical-align: middle;
+        }
+
+        .label {
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .label:hover {
+            transform: scale(1.05);
+        }
+
+        .success { background-color: #2ecc71; }
+        .info { background-color: #3498db; }
+        .warning { background-color: #f39c12; }
+        .danger { background-color: #e74c3c; }
+        .other { background-color: #95a5a6; color: white; }
+
+        .btn {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 2px;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<div class="container">
+    <h4 class="text-center">BLOOD DONATION DETAILS</h4>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Donor Name</th>
+                <th scope="col">Disease</th>
+                <th scope="col">Age</th>
+                <th scope="col">Blood Group</th>
+                <th scope="col">Unit</th>
+                <th scope="col">Request Date</th>
+                <th scope="col">Status</th>
+                <th class="text-right">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in donations %}
+            <tr>
+                <td>{{t.donor}}</td>
+                <td>{{t.disease}}</td>
+                <td>{{t.age}}</td>
+                <td>{{t.bloodgroup}}</td>
+                <td>{{t.unit}}</td>
+                <td>{{t.date}}</td>
+                <td>
+                    <span class="label {% if t.status == 'Pending' %}warning{% elif t.status == 'Approved' %}success{% else %}danger{% endif %}">
+                        {{t.status}}
+                    </span>
+                </td>
+                {% if t.status == 'Pending' %}
+                <td class="text-right">
+                    <a href="{% url 'approve-donation' t.id %}" class="btn btn-primary animate-pulse">APPROVE</a>
+                    <a href="{% url 'reject-donation' t.id %}" class="btn btn-danger">REJECT</a>
+                </td>
+                {% elif t.status == 'Approved' %}
+                <td><span class="label warning">{{t.unit}} Unit Added To Stock</span></td>
+                {% else %}
+                <td><span class="label danger">0 Unit Added To Stock</span></td> 
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const rows = document.querySelectorAll('tbody tr');
+        rows.forEach((row, index) => {
+            row.style.animation = `fadeIn 0.5s ease-out ${index * 0.1}s`;
+            row.style.opacity = '0';
+            row.style.animationFillMode = 'forwards';
+        });
+    });
+</script>
+{% endblock content %}
+

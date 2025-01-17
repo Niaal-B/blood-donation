@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank Management System - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #34495e;
+            --text-color: #2c3e50;
+            --bg-color: #ecf0f1;
+            --sidebar-width: 250px;
+            --header-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow: hidden;
+        }
+
+        .wrapper {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--header-height);
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header__left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header__logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header__logo i {
+            margin-right: 10px;
+        }
+
+        .header__nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .header__nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+            margin-left: 15px;
+        }
+
+        .header__nav a:hover {
+            opacity: 0.8;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--header-height));
+            background-color: var(--secondary-color);
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+            z-index: 900;
+        }
+
+        .sidebar__nav {
+            list-style-type: none;
+            padding: 20px 0;
+        }
+
+        .sidebar__nav-item {
+            padding: 10px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar__nav-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .sidebar__nav-link {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar__nav-link:hover {
+            transform: translateX(5px);
+        }
+
+        .sidebar__nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex-grow: 1;
+            margin-left: var(--sidebar-width);
+            padding: calc(var(--header-height) + 20px) 20px 20px;
+            overflow-y: auto;
+            height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar--open {
+                transform: translateX(0);
+            }
+
+            .main-content--shifted {
+                margin-left: var(--sidebar-width);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .animate-slideIn {
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        /* Additional Styles */
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #c0392b;
+        }
+
+        /* Sidebar Toggle Button */
+        .sidebar-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 10px;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header animate-slideIn">
+        <div class="header__left">
+            <button id="sidebarToggle" class="sidebar-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header__logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>Blood Bank Management</span>
+            </div>
+        </div>
+        <nav class="header__nav">
+            <a href="/logout" class="btn btn-primary">
+                Logout <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </nav>
+    </header>
+
+    <div class="wrapper">
+        <aside class="sidebar" id="sidebar">
+            <nav>
+                <ul class="sidebar__nav">
+                    <li class="sidebar__nav-item animate-fadeIn" style="animation-delay: 0.1s;">
+                        <a href="/" class="sidebar__nav-link">
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li class="sidebar__nav-item animate-fadeIn" style="animation-delay: 0.2s;">
+                        <a href="/admin-donor" class="sidebar__nav-link">
+                            <i class="fas fa-user"></i> Donor
+                        </a>
+                    </li>
+                    <li class="sidebar__nav-item animate-fadeIn" style="animation-delay: 0.3s;">
+                        <a href="/admin-patient" class="sidebar__nav-link">
+                            <i class="fas fa-user-injured"></i> Patient
+                        </a>
+                    </li>
+                    <li class="sidebar__nav-item animate-fadeIn" style="animation-delay: 0.4s;">
+                        <a href="/admin-donation" class="sidebar__nav-link">
+                            <i class="fas fa-hand-holding-medical"></i> Donations
+                        </a>
+                    </li>
+                    <li class="sidebar__nav-item animate-fadeIn" style="animation-delay: 0.5s;">
+                        <a href="/admin-request" class="sidebar__nav-link">
+                            <i class="fas fa-sync-alt"></i> Blood Requests
+                        </a>
+                    </li>
+                    <li class="sidebar__nav-item animate-fadeIn" style="animation-delay: 0.6s;">
+                        <a href="/admin-request-history" class="sidebar__nav-link">
+                            <i class="fas fa-history"></i> Request History
+                        </a>
+                    </li>
+                    <li class="sidebar__nav-item animate-fadeIn" style="animation-delay: 0.7s;">
+                        <a href="/admin-blood" class="sidebar__nav-link">
+                            <i class="fas fa-hand-holding-water"></i> Blood Stock
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content animate-fadeIn">
+            {% block content %}
+            {% endblock content %}
+        </main>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('sidebar--open');
+            mainContent.classList.toggle('main-content--shifted');
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking outside of it
+        document.addEventListener('click', function(event) {
+            const isClickInsideSidebar = sidebar.contains(event.target);
+            const isClickOnToggleButton = sidebarToggle.contains(event.target);
+            
+            if (!isClickInsideSidebar && !isClickOnToggleButton && sidebar.classList.contains('sidebar--open')) {
+                toggleSidebar();
+            }
+        });
+
+        // Adjust layout on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('sidebar--open');
+                mainContent.classList.remove('main-content--shifted');
+            }
+        });
+    </script>
+</body>
+</html>
+
