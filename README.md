@@ -1,19 +1,51 @@
-# Blood Bank Management System
-![developer](https://img.shields.io/badge/Developed%20By%20%3A-Sumit%20Kumar-red)
----
-## Screenshots
-### Homepage
-![homepage snap](https://github.com/sumitkumar1503/bloodbankmanagement/blob/master/static/screenshot/homepage.png?raw=true)
-### Admin Dashboard
-![dashboard snap](https://github.com/sumitkumar1503/bloodbankmanagement/blob/master/static/screenshot/admindashboard.png?raw=true)
-### Blood Donation 
-![invoice snap](https://github.com/sumitkumar1503/bloodbankmanagement/blob/master/static/screenshot/blooddonation.png?raw=true)
-### Blood Request
-![doctor snap](https://github.com/sumitkumar1503/bloodbankmanagement/blob/master/static/screenshot/bloodrequest.png?raw=true)
-### Logout
-![doctor snap](https://github.com/sumitkumar1503/bloodbankmanagement/blob/master/static/screenshot/logout.png?raw=true)
----
-## Functions
+
+## HOW TO RUN THIS PROJECT On windows
+- Install Python(3.7.6) (Dont Forget to Tick Add to Path while installing Python)
+- Download This Project Zip Folder and Extract it
+- Move to project folder in Terminal. Then run following Commands :
+ 
+
+cd path\to\your\project
+
+
+python -m venv venv
+
+
+
+Activate the Virtual Environment:
+
+Inside your project directory, navigate to the Scripts folder within your virtual environment directory. Then, use the activate command:
+
+For Command Prompt:
+Scripts\activate
+
+
+For PowerShell:
+.\Scripts\Activate.ps1
+
+
+After running this command, you should see the virtual environment's name appear at the beginning of your command prompt or PowerShell prompt. This indicates that the virtual environment is activated.
+
+
+
+```
+python -m pip install -r requirements. txt
+```
+
+```
+py manage.py makemigrations
+py manage.py migrate
+py manage.py runserver
+```
+
+```
+http://127.0.0.1:8000/
+```
+
+
+
+
+
 
 ### Admin
 - Create Admin account using following command
@@ -53,28 +85,3 @@ py manage.py createsuperuser
 - Patient can see their blood request history with status (Pending, Approved, Rejected).
 
 ---
-
-## HOW TO RUN THIS PROJECT
-- Install Python(3.7.6) (Dont Forget to Tick Add to Path while installing Python)
-- Download This Project Zip Folder and Extract it
-- Move to project folder in Terminal. Then run following Commands :
-
-```
-python -m pip install -r requirements. txt
-```
-
-```
-py manage.py makemigrations
-py manage.py migrate
-py manage.py runserver
-```
-- Now enter following URL in Your Browser Installed On Your Pc
-```
-http://127.0.0.1:8000/
-```
-
-
-## Feedback
-Any suggestion and feedback is welcome. You can message me on facebook
-- [Contact on Facebook](https://fb.com/sumit.luv)
-- [Subscribe my Channel LazyCoder On Youtube](https://youtube.com/lazycoders)
