@@ -3,7 +3,7 @@
 - Install Python(3.7.6) (Dont Forget to Tick Add to Path while installing Python)
 - Download This Project Zip Folder and Extract it 
 - Move to project folder in Terminal. Then run following Commands : 
- 
+  
   
 cd path\to\your\project
 
