@@ -5,7 +5,7 @@
 - Move to project folder in Terminal. Then run following Commands : 
   
   
-cd path\to\your\project
+cd path\to\your\project 
 
 
 python -m venv venv
