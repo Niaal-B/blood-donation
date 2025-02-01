@@ -4,7 +4,7 @@
 - Download This Project Zip Folder and Extract it
 - Move to project folder in Terminal. Then run following Commands :
  
- 
+  
 cd path\to\your\project
 
 
